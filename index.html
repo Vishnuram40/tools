@@ -31,7 +31,7 @@
     header {
       background-color: #007BFF;
       color: white;
-      padding: 20px;
+      padding: 40px 20px;
       text-align: center;
     }
 
@@ -132,11 +132,14 @@
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       text-align: center;
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: block;
+      color: inherit;
     }
 
     .tool-card:hover {
       transform: translateY(-5px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
     }
 
     .tool-card i {
@@ -148,6 +151,7 @@
     .tool-card h3 {
       margin: 10px 0;
       font-size: 1.2rem;
+      color: #333;
     }
 
     .tool-card p {
@@ -277,38 +281,66 @@
 
   <!-- Tools Grid -->
   <section id="tools-grid">
-    <a href="/tool/img-copmpress.html" class="tool-card-link">
-        <div class="tool-card">
-            <i class="fas fa-image"></i>
-            <h3>Image Compressor</h3>
-            <p>Compress your images without losing quality.</p>
-        </div>
+    <a href="img-copmpress.html" class="tool-card">
+      <i class="fas fa-image"></i>
+      <h3>Image Compressor</h3>
+      <p>Compress your images without losing quality.</p>
     </a>
-    <div class="tool-card">
+    <a href="image-resizer.html" class="tool-card">
+      <i class="fas fa-expand-arrows-alt"></i>
+      <h3>Image Resizer</h3>
+      <p>Resize images to your desired dimensions.</p>
+    </a>
+    <a href="image-converter.html" class="tool-card">
+      <i class="fas fa-file-image"></i>
+      <h3>Image Converter</h3>
+      <p>Convert images to different formats (JPG, PNG, etc.).</p>
+    </a>
+    <a href="image-watermark.html" class="tool-card">
+      <i class="fas fa-tint"></i>
+      <h3>Image Watermark</h3>
+      <p>Add watermarks to your images easily.</p>
+    </a>
+    <a href="pdf-merger.html" class="tool-card">
       <i class="fas fa-file-pdf"></i>
       <h3>PDF Merger</h3>
       <p>Merge multiple PDF files into one.</p>
-    </div>
-    <div class="tool-card">
-      <i class="fas fa-image"></i>
-      <h3>Image Resizer</h3>
-      <p>Resize images to your desired dimensions.</p>
-    </div>
-    <div class="tool-card">
-      <i class="fas fa-file-pdf"></i>
+    </a>
+    <a href="pdf-splitter.html" class="tool-card">
+      <i class="fas fa-cut"></i>
       <h3>PDF Splitter</h3>
       <p>Split PDF files into individual pages.</p>
-    </div>
-    <div class="tool-card">
-      <i class="fas fa-image"></i>
-      <h3>Image Converter</h3>
-      <p>Convert images to different formats.</p>
-    </div>
-    <div class="tool-card">
-      <i class="fas fa-file-pdf"></i>
+    </a>
+    <a href="pdf-to-word.html" class="tool-card">
+      <i class="fas fa-file-word"></i>
       <h3>PDF to Word</h3>
       <p>Convert PDF files to Word documents.</p>
-    </div>
+    </a>
+    <a href="pdf-compressor.html" class="tool-card">
+      <i class="fas fa-file-archive"></i>
+      <h3>PDF Compressor</h3>
+      <p>Reduce the size of your PDF files.</p>
+    </a>
+    <a href="qr-generator.html" class="tool-card">
+      <i class="fas fa-qrcode"></i>
+      <h3>QR Code Generator</h3>
+      <p>Create QR codes for URLs, text, and more.</p>
+    </a>
+    <a href="color-picker.html" class="tool-card">
+      <i class="fas fa-eye-dropper"></i>
+      <h3>Color Picker</h3>
+      <p>Pick and identify colors from images.</p>
+    </a>
+    <a href="file-converter.html" class="tool-card">
+      <i class="fas fa-file-export"></i>
+      <h3>File Converter</h3>
+      <p>Convert files between various formats.</p>
+    </a>
+    <a href="video-compressor.html" class="tool-card">
+      <i class="fas fa-video"></i>
+      <h3>Video Compressor</h3>
+      <p>Compress videos without losing quality.</p>
+    </a>
   </section>
 
   <!-- Call to Action -->
