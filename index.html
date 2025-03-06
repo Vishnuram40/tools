@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Your one-stop destination for free online tools. Compress images, convert PDFs, and more!">
+  <meta name="keywords" content="image tools, PDF tools, online tools, free tools, compress images, convert PDF">
+  <meta name="author" content="Your Name">
+  <title>Online Tools - Free Image and PDF Tools</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Header */
+    header {
+      background-color: #007BFF;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+
+    header p {
+      margin: 10px 0 0;
+      font-size: 1.1rem;
+    }
+
+    /* Navigation */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #333;
+      color: white;
+    }
+
+    nav .logo {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+
+    nav ul li {
+      margin-left: 20px;
+    }
+
+    nav ul li a {
+      color: white;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+    }
+
+    nav ul li a:hover {
+      color: #007BFF;
+    }
+
+    /* Search Bar */
+    #search-bar {
+      padding: 20px;
+      text-align: center;
+      background-color: #fff;
+      margin: 20px auto;
+      max-width: 600px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #search-bar input {
+      width: 80%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    #search-bar button {
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-left: 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    #search-bar button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Tools Grid */
+    #tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .tool-card {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .tool-card i {
+      font-size: 2rem;
+      color: #007BFF;
+      margin-bottom: 10px;
+    }
+
+    .tool-card h3 {
+      margin: 10px 0;
+      font-size: 1.2rem;
+    }
+
+    .tool-card p {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    /* Call to Action */
+    #cta {
+      background-color: #007BFF;
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    #cta h2 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    #cta p {
+      margin: 10px 0 20px;
+      font-size: 1.1rem;
+    }
+
+    #cta button {
+      padding: 12px 25px;
+      background-color: white;
+      color: #007BFF;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    #cta button:hover {
+      background-color: #0056b3;
+      color: white;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #333;
+      color: white;
+      margin-top: 40px;
+    }
+
+    footer p {
+      margin: 0;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      nav ul {
+        margin-top: 10px;
+      }
+
+      nav ul li {
+        margin: 0 10px;
+      }
+
+      #search-bar input {
+        width: 70%;
+      }
+
+      #tools-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 2rem;
+      }
+
+      header p {
+        font-size: 1rem;
+      }
+
+      #search-bar input {
+        width: 60%;
+      }
+
+      #cta h2 {
+        font-size: 1.5rem;
+      }
+
+      #cta p {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <h1>Online Tools</h1>
+    <p>Your one-stop destination for free online tools</p>
+  </header>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="logo">Online Tools</div>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Image Tools</a></li>
+      <li><a href="#">PDF Tools</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Search Bar -->
+  <section id="search-bar">
+    <input type="text" placeholder="Search for tools...">
+    <button><i class="fas fa-search"></i> Search</button>
+  </section>
+
+  <!-- Tools Grid -->
+  <section id="tools-grid">
+    <a href="img-compress.html" class="tool-card-link">
+        <div class="tool-card">
+            <i class="fas fa-image"></i>
+            <h3>Image Compressor</h3>
+            <p>Compress your images without losing quality.</p>
+        </div>
+    </a>
+</section>
+
+    <div class="tool-card">
+      <i class="fas fa-file-pdf"></i>
+      <h3>PDF Merger</h3>
+      <p>Merge multiple PDF files into one.</p>
+    </div>
+    <div class="tool-card">
+      <i class="fas fa-image"></i>
+      <h3>Image Resizer</h3>
+      <p>Resize images to your desired dimensions.</p>
+    </div>
+    <div class="tool-card">
+      <i class="fas fa-file-pdf"></i>
+      <h3>PDF Splitter</h3>
+      <p>Split PDF files into individual pages.</p>
+    </div>
+    <div class="tool-card">
+      <i class="fas fa-image"></i>
+      <h3>Image Converter</h3>
+      <p>Convert images to different formats.</p>
+    </div>
+    <div class="tool-card">
+      <i class="fas fa-file-pdf"></i>
+      <h3>PDF to Word</h3>
+      <p>Convert PDF files to Word documents.</p>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section id="cta">
+    <h2>Need More Tools?</h2>
+    <p>Explore our full collection of free online tools.</p>
+    <button>View All Tools</button>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2023 Online Tools. All rights reserved.</p>
+  </footer>
+</body>
+</html>
