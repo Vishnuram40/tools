@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Resizer Tool</title>
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    header .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    header nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: 500;
+    }
+
+    .ad-top, .ad-bottom {
+      text-align: center;
+      padding: 10px;
+      background-color: #e0e0e0;
+      margin: 10px 0;
+    }
+
+    main {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .upload-area {
+      border: 2px dashed #007bff;
+      padding: 40px;
+      margin: 20px auto;
+      max-width: 600px;
+      background-color: white;
+      border-radius: 10px;
+      transition: border-color 0.3s ease;
+    }
+
+    .upload-area:hover {
+      border-color: #0056b3;
+    }
+
+    .upload-label {
+      cursor: pointer;
+      font-size: 18px;
+      color: #007bff;
+    }
+
+    #image-canvas {
+      max-width: 100%;
+      margin-top: 20px;
+      display: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .toolbar {
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .toolbar button:hover {
+      background-color: #0056b3;
+    }
+
+    .resize-options, .export-options {
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .resize-options input, .export-options select {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      margin-top: 20px;
+    }
+
+    footer .footer-links a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: 500;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .upload-area {
+        padding: 20px;
+      }
+
+      .toolbar, .resize-options, .export-options {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .toolbar button, .resize-options input, .export-options select {
+        width: 100%;
+        margin: 5px 0;
+      }
+    }
+  </style>
+  <!-- Google AdSense Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+  <!-- Header with AdSense Ad -->
+  <header>
+    <div class="logo">Image Resizer</div>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Features</a>
+      <a href="#">About</a>
+    </nav>
+  </header>
+
+  <!-- Top AdSense Ad -->
+  <div class="ad-top">
+    <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-YOUR_AD_SENSE_ID"
+      data-ad-slot="TOP_AD_SLOT_ID"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+
+  <!-- Main Workspace -->
+  <main>
+    <div class="upload-area">
+      <input type="file" id="image-upload" accept="image/*" hidden>
+      <label for="image-upload" class="upload-label">
+        <span>Upload or Drop Image Here</span>
+      </label>
+      <canvas id="image-canvas"></canvas>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <button id="resize-btn">Resize</button>
+      <button id="crop-btn">Crop</button>
+      <button id="flip-btn">Flip</button>
+      <button id="rotate-btn">Rotate</button>
+    </div>
+
+    <!-- Resize Options -->
+    <div class="resize-options">
+      <label for="width">Width:</label>
+      <input type="number" id="width" placeholder="Width">
+      <label for="height">Height:</label>
+      <input type="number" id="height" placeholder="Height">
+      <label for="percentage">Percentage:</label>
+      <input type="number" id="percentage" placeholder="Percentage">
+    </div>
+
+    <!-- Export Options -->
+    <div class="export-options">
+      <label for="format">Export As:</label>
+      <select id="format">
+        <option value="png">PNG</option>
+        <option value="jpeg">JPG</option>
+        <option value="webp">WebP</option>
+      </select>
+      <button id="download-btn">Download</button>
+    </div>
+  </main>
+
+  <!-- Bottom AdSense Ad -->
+  <div class="ad-bottom">
+    <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-YOUR_AD_SENSE_ID"
+      data-ad-slot="BOTTOM_AD_SLOT_ID"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Contact Us</a>
+    </div>
+  </footer>
+
+  <script>
+    const imageUpload = document.getElementById('image-upload');
+    const imageCanvas = document.getElementById('image-canvas');
+    const ctx = imageCanvas.getContext('2d');
+    const resizeBtn = document.getElementById('resize-btn');
+    const cropBtn = document.getElementById('crop-btn');
+    const flipBtn = document.getElementById('flip-btn');
+    const rotateBtn = document.getElementById('rotate-btn');
+    const widthInput = document.getElementById('width');
+    const heightInput = document.getElementById('height');
+    const percentageInput = document.getElementById('percentage');
+    const formatSelect = document.getElementById('format');
+    const downloadBtn = document.getElementById('download-btn');
+
+    let uploadedImage = null;
+    let isFlipped = false;
+    let rotationAngle = 0;
+
+    // Upload Image
+    imageUpload.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const img = new Image();
+          img.src = event.target.result;
+          img.onload = () => {
+            imageCanvas.width = img.width;
+            imageCanvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            uploadedImage = img;
+            imageCanvas.style.display = 'block';
+          };
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Resize Image
+    resizeBtn.addEventListener('click', () => {
+      const width = parseInt(widthInput.value);
+      const height = parseInt(heightInput.value);
+      const percentage = parseInt(percentageInput.value);
+
+      if (uploadedImage) {
+        let newWidth, newHeight;
+        if (percentage) {
+          newWidth = (uploadedImage.width * percentage) / 100;
+          newHeight = (uploadedImage.height * percentage) / 100;
+        } else {
+          newWidth = width || uploadedImage.width;
+          newHeight = height || uploadedImage.height;
+        }
+
+        imageCanvas.width = newWidth;
+        imageCanvas.height = newHeight;
+        ctx.drawImage(uploadedImage, 0, 0, newWidth, newHeight);
+      }
+    });
+
+    // Crop Image
+    cropBtn.addEventListener('click', () => {
+      if (uploadedImage) {
+        const cropWidth = parseInt(prompt("Enter crop width:"));
+        const cropHeight = parseInt(prompt("Enter crop height:"));
+        if (cropWidth && cropHeight) {
+          imageCanvas.width = cropWidth;
+          imageCanvas.height = cropHeight;
+          ctx.drawImage(uploadedImage, 0, 0, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+        }
+      }
+    });
+
+    // Flip Image
+    flipBtn.addEventListener('click', () => {
+      if (uploadedImage) {
+        isFlipped = !isFlipped;
+        ctx.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
+        ctx.save();
+        if (isFlipped) {
+          ctx.translate(imageCanvas.width, 0);
+          ctx.scale(-1, 1);
+        } else {
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+        }
+        ctx.drawImage(uploadedImage, 0, 0);
+        ctx.restore();
+      }
+    });
+
+    // Rotate Image
+    rotateBtn.addEventListener('click', () => {
+      if (uploadedImage) {
+        rotationAngle += 90;
+        if (rotationAngle >= 360) rotationAngle = 0;
+
+        const canvas = document.createElement('canvas');
+        const tempCtx = canvas.getContext('2d');
+
+        if (rotationAngle % 180 === 90) {
+          canvas.width = imageCanvas.height;
+          canvas.height = imageCanvas.width;
+        } else {
+          canvas.width = imageCanvas.width;
+          canvas.height = imageCanvas.height;
+        }
+
+        tempCtx.translate(canvas.width / 2, canvas.height / 2);
+        tempCtx.rotate((rotationAngle * Math.PI) / 180);
+        tempCtx.drawImage(uploadedImage, -uploadedImage.width / 2, -uploadedImage.height / 2);
+
+        imageCanvas.width = canvas.width;
+        imageCanvas.height = canvas.height;
+        ctx.drawImage(canvas, 0, 0);
+      }
+    });
+
+    // Download Image
+    downloadBtn.addEventListener('click', () => {
+      if (uploadedImage) {
+        const format = formatSelect.value;
+        const dataUrl = imageCanvas.toDataURL(`image/${format}`);
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = `image.${format}`;
+        link.click();
+      }
+    });
+  </script>
+</body>
+</html>
