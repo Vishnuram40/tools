@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Convert files effortlessly with our advanced file conversion tool. Supports multiple formats including images, documents, ebooks, vectors, and CAD.">
+  <meta name="keywords" content="file converter, image converter, document converter, ebook converter, vector converter, CAD converter">
+  <title>File Converter Pro</title>
+  <!-- Add jsPDF Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      background-color: #6200ea;
+      color: #fff;
+      padding: 20px 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    #theme-toggle {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 50px 0;
+    }
+
+    .upload-area {
+      border: 2px dashed #6200ea;
+      padding: 40px;
+      margin: 20px auto;
+      cursor: pointer;
+      background-color: #fff;
+      border-radius: 10px;
+      transition: background-color 0.3s;
+    }
+
+    .upload-area:hover {
+      background-color: #f0f0f0;
+    }
+
+    .upload-area p {
+      margin: 0;
+      font-size: 18px;
+      color: #6200ea;
+    }
+
+    #file-input {
+      display: none;
+    }
+
+    #file-name {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background-color: #e0e0e0;
+      margin-top: 20px;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .progress {
+      width: 0;
+      height: 100%;
+      background-color: #6200ea;
+      transition: width 0.3s;
+    }
+
+    /* Format Select */
+    .format-select {
+      margin-top: 20px;
+    }
+
+    .format-select label {
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .format-select select {
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #6200ea;
+      font-size: 16px;
+      width: 100%;
+      max-width: 300px;
+      margin-top: 10px;
+    }
+
+    /* Buttons */
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .buttons button {
+      padding: 10px 20px;
+      background-color: #6200ea;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    .buttons button:hover {
+      background-color: #3700b3;
+    }
+
+    .buttons button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    /* Output Section */
+    .output-section {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .output-section a {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #6200ea;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .output-section a:hover {
+      background-color: #3700b3;
+    }
+
+    /* Ad Section */
+    .ad-section {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .ad-section .ad-unit {
+      background-color: #e0e0e0;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      margin: 10px 0;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 50px 0;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .feature {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .feature h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .feature p {
+      margin: 0;
+      font-size: 14px;
+      color: #666;
+    }
+
+    /* Formats Section */
+    .formats {
+      padding: 50px 0;
+    }
+
+    .format-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .format-category {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .format-category h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .format-category ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .format-category ul li {
+      font-size: 14px;
+      color: #666;
+      margin: 5px 0;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    /* Dark Mode */
+    body.dark-mode {
+      background-color: #121212;
+      color: #fff;
+    }
+
+    body.dark-mode .upload-area {
+      background-color: #1e1e1e;
+      border-color: #3700b3;
+    }
+
+    body.dark-mode .upload-area p {
+      color: #bb86fc;
+    }
+
+    body.dark-mode .feature, body.dark-mode .format-category {
+      background-color: #1e1e1e;
+      color: #fff;
+    }
+
+    body.dark-mode footer {
+      background-color: #000;
+    }
+  </style>
+  <!-- Google AdSense Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <h1>File Converter Pro</h1>
+      <nav>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#formats">Supported Formats</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <button id="theme-toggle">🌙</button>
+    </div>
+  </header>
+
+  <!-- Ad Section -->
+  <section class="ad-section">
+    <div class="container">
+      <div class="ad-unit">
+        <!-- AdSense Ad Unit -->
+        <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+          data-ad-slot="XXXXXXXXXX"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h2>Convert Files Effortlessly</h2>
+      <p>Supports images, documents, ebooks, vectors, and CAD formats.</p>
+      <div class="upload-area" id="upload-area">
+        <p>Drag & drop files here or <span>browse</span></p>
+        <input type="file" id="file-input" multiple>
+        <div id="file-name"></div>
+      </div>
+      <div class="format-select">
+        <label for="target-format">Convert to:</label>
+        <select id="target-format">
+          <!-- Image Formats -->
+          <optgroup label="Image Formats">
+            <option value="jpg">JPG</option>
+            <option value="png">PNG</option>
+            <option value="bmp">BMP</option>
+            <option value="gif">GIF</option>
+            <option value="ico">ICO</option>
+            <option value="jpeg">JPEG</option>
+            <option value="odd">ODD</option>
+            <option value="psd">PSD</option>
+            <option value="svg">SVG</option>
+            <option value="tiff">TIFF</option>
+            <option value="webp">WEBP</option>
+            <option value="ps">PS</option>
+            <option value="txt">TXT</option>
+          </optgroup>
+          <!-- Document Formats -->
+          <optgroup label="Document Formats">
+            <option value="pdf">PDF</option>
+            <option value="doc">DOC</option>
+            <option value="docx">DOCX</option>
+            <option value="dot">DOT</option>
+            <option value="dotx">DOTX</option>
+            <option value="dotm">DOTM</option>
+            <option value="docm">DOCM</option>
+            <option value="rtf">RTF</option>
+            <option value="odt">ODT</option>
+            <option value="djvu">DJVU</option>
+            <option value="abw">ABW</option>
+            <option value="dbk">DBK</option>
+            <option value="kwd">KWD</option>
+            <option value="sxw">SXW</option>
+            <option value="aw">AW</option>
+            <option value="xps">XPS</option>
+            <option value="oxps">OXPS</option>
+          </optgroup>
+          <!-- Ebook Formats -->
+          <optgroup label="Ebook Formats">
+            <option value="pdb">PDB</option>
+            <option value="azw3">AZW3</option>
+            <option value="epub">EPUB</option>
+            <option value="fb2">FB2</option>
+            <option value="lrf">LRF</option>
+            <option value="mobi">MOBI</option>
+            <option value="rb">RB</option>
+            <option value="snb">SNB</option>
+            <option value="tcr">TCR</option>
+          </optgroup>
+          <!-- Vector Formats -->
+          <optgroup label="Vector Formats">
+            <option value="svg">SVG</option>
+            <option value="ai">AI</option>
+            <option value="eps">EPS</option>
+            <option value="ps">PS</option>
+            <option value="emf">EMF</option>
+            <option value="wmf">WMF</option>
+            <option value="cgm">CGM</option>
+            <option value="sk">SK</option>
+            <option value="sk1">SK1</option>
+            <option value="plt">PLT</option>
+            <option value="ag">AG</option>
+          </optgroup>
+          <!-- CAD Format -->
+          <optgroup label="CAD Format">
+            <option value="dxf">DXF</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="progress-bar" id="progress-bar">
+        <div class="progress" id="progress"></div>
+      </div>
+      <div class="buttons">
+        <button id="convert-btn" disabled>Convert</button>
+        <button id="download-btn" disabled>Download</button>
+      </div>
+      <div class="output-section" id="output-section">
+        <p>Converted File:</p>
+        <a id="output-link" href="#" download style="display: none;">Download Converted File</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ad Section -->
+  <section class="ad-section">
+    <div class="container">
+      <div class="ad-unit">
+        <!-- AdSense Ad Unit -->
+        <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+          data-ad-slot="XXXXXXXXXX"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features">
+    <div class="container">
+      <h2>Key Features</h2>
+      <div class="feature-grid">
+        <div class="feature">
+          <h3>Drag & Drop Upload</h3>
+          <p>Easily upload files with a simple drag & drop interface.</p>
+        </div>
+        <div class="feature">
+          <h3>Multiple Formats</h3>
+          <p>Supports a wide range of file formats for conversion.</p>
+        </div>
+        <div class="feature">
+          <h3>Real-time Progress</h3>
+          <p>Track conversion progress with a real-time progress bar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Supported Formats Section -->
+  <section id="formats" class="formats">
+    <div class="container">
+      <h2>Supported Formats</h2>
+      <div class="format-grid">
+        <div class="format-category">
+          <h3>Image Formats</h3>
+          <ul>
+            <li>JPG</li>
+            <li>PDF</li>
+            <li>BMP</li>
+            <li>GIF</li>
+            <li>ICO</li>
+            <li>JPEG</li>
+            <li>ODD</li>
+            <li>PNG</li>
+            <li>PSD</li>
+            <li>SVG</li>
+            <li>TIFF</li>
+            <li>WEBP</li>
+            <li>PS</li>
+            <li>TXT</li>
+          </ul>
+        </div>
+        <div class="format-category">
+          <h3>Document Formats</h3>
+          <ul>
+            <li>PDF</li>
+            <li>DOC</li>
+            <li>DOCX</li>
+            <li>DOT</li>
+            <li>DOTX</li>
+            <li>DOTM</li>
+            <li>DOCM</li>
+            <li>RTF</li>
+            <li>ODT</li>
+            <li>DJVU</li>
+            <li>ABW</li>
+            <li>DBK</li>
+            <li>KWD</li>
+            <li>SXW</li>
+            <li>AW</li>
+            <li>XPS</li>
+            <li>OXPS</li>
+          </ul>
+        </div>
+        <div class="format-category">
+          <h3>Ebook Formats</h3>
+          <ul>
+            <li>PDB</li>
+            <li>AZW3</li>
+            <li>EPUB</li>
+            <li>FB2</li>
+            <li>LRF</li>
+            <li>MOBI</li>
+            <li>RB</li>
+            <li>SNB</li>
+            <li>TCR</li>
+          </ul>
+        </div>
+        <div class="format-category">
+          <h3>Vector Formats</h3>
+          <ul>
+            <li>SVG</li>
+            <li>AI</li>
+            <li>EPS</li>
+            <li>PS</li>
+            <li>EMF</li>
+            <li>WMF</li>
+            <li>CGM</li>
+            <li>SK</li>
+            <li>SK1</li>
+            <li>PLT</li>
+            <li>AG</li>
+          </ul>
+        </div>
+        <div class="format-category">
+          <h3>CAD Format</h3>
+          <ul>
+            <li>DXF</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ad Section -->
+  <section class="ad-section">
+    <div class="container">
+      <div class="ad-unit">
+        <!-- AdSense Ad Unit -->
+        <ins class="adsbygoogle"
+          style="display:block"
+          data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+          data-ad-slot="XXXXXXXXXX"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+        <script>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <div class="container">
+      <p>&copy; 2023 File Converter Pro. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Dark Mode Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+    });
+
+    // File Upload and Conversion Logic
+    const uploadArea = document.getElementById('upload-area');
+    const fileInput = document.getElementById('file-input');
+    const fileNameDisplay = document.getElementById('file-name');
+    const progressBar = document.getElementById('progress');
+    const convertBtn = document.getElementById('convert-btn');
+    const downloadBtn = document.getElementById('download-btn');
+    const outputLink = document.getElementById('output-link');
+    const outputSection = document.getElementById('output-section');
+    const targetFormat = document.getElementById('target-format');
+
+    let uploadedFile = null;
+
+    // Drag & Drop File Upload
+    uploadArea.addEventListener('click', () => fileInput.click());
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.style.backgroundColor = '#e0e0e0';
+    });
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.style.backgroundColor = 'transparent';
+    });
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.style.backgroundColor = 'transparent';
+      uploadedFile = e.dataTransfer.files[0];
+      handleFileUpload(uploadedFile);
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      uploadedFile = e.target.files[0];
+      handleFileUpload(uploadedFile);
+    });
+
+    function handleFileUpload(file) {
+      if (file) {
+        fileNameDisplay.textContent = `Uploaded File: ${file.name}`;
+        convertBtn.disabled = false;
+        progressBar.style.width = '0%';
+        outputLink.style.display = 'none';
+      }
+    }
+
+    // Convert Button
+    convertBtn.addEventListener('click', () => {
+      if (!uploadedFile) return;
+
+      // Reset progress bar
+      progressBar.style.width = '0%';
+
+      // Simulate conversion progress
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 10;
+        progressBar.style.width = `${progress}%`;
+        if (progress >= 100) {
+          clearInterval(interval);
+          simulateConversion(uploadedFile);
+        }
+      }, 100);
+    });
+
+    // Simulate Conversion
+    function simulateConversion(file) {
+      const selectedFormat = targetFormat.value;
+
+      if (selectedFormat === "pdf") {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF();
+
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          const imgData = event.target.result;
+
+          // Add image to PDF
+          pdf.addImage(imgData, 'JPEG', 10, 10, 180, 160);
+
+          // Prepare PDF for download
+          const pdfBlob = pdf.output("blob");
+          const pdfURL = URL.createObjectURL(pdfBlob);
+
+          // Enable download button
+          outputLink.href = pdfURL;
+          outputLink.download = `converted_${file.name.split('.')[0]}.pdf`;
+          outputLink.style.display = 'inline-block';
+          downloadBtn.disabled = false;
+        };
+
+        reader.readAsDataURL(file);
+      } else {
+        // If not PDF, perform normal file conversion
+        const blob = new Blob([file], { type: `application/${selectedFormat}` });
+        const url = URL.createObjectURL(blob);
+        outputLink.href = url;
+        outputLink.download = `converted_${file.name.split('.')[0]}.${selectedFormat}`;
+        outputLink.style.display = 'inline-block';
+        downloadBtn.disabled = false;
+      }
+    }
+
+    // Download Button
+    downloadBtn.addEventListener('click', () => {
+      outputLink.click();
+    });
+  </script>
+</body>
+</html>
