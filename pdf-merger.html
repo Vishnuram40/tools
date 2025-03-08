@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Merger Tool</title>
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <!-- Google AdMob Ads Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ADMOB_PUBLISHER_ID" crossorigin="anonymous"></script>
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        /* Top Banner Ad Container */
+        .ad-container {
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .ad-container ins {
+            display: inline-block;
+            width: 100%;
+            height: 100px; /* Adjust height as needed */
+            background: #f0f0f0; /* Placeholder background */
+            border: 1px dashed #ccc; /* Placeholder border */
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #ff4b4b;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .upload-section {
+            border: 2px dashed #ff4b4b;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .upload-section:hover {
+            background: #fff5f5;
+        }
+
+        .upload-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .upload-label i {
+            color: #ff4b4b;
+            font-size: 2rem;
+        }
+
+        .upload-label span {
+            color: #555;
+            font-size: 1.1rem;
+        }
+
+        .upload-label .highlight {
+            color: #ff4b4b;
+            font-weight: bold;
+        }
+
+        .file-list {
+            margin: 1.5rem 0;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: #fff5f5;
+            border-radius: 10px;
+            border: 1px solid #ffcccc;
+        }
+
+        .file-item img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .file-item span {
+            flex: 1;
+            margin: 0 1rem;
+            color: #555;
+        }
+
+        .file-item .delete-btn {
+            color: #ff4b4b;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-item .delete-btn:hover {
+            color: #e63a3a;
+        }
+
+        .merge-btn {
+            background: #ff4b4b;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 200px;
+            margin: 1rem auto;
+        }
+
+        .merge-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .merge-btn:hover:not(:disabled) {
+            background: #e63a3a;
+            transform: translateY(-2px);
+        }
+
+        .download-link {
+            background: #ff4b4b;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .download-link:hover {
+            background: #e63a3a;
+            transform: translateY(-2px);
+        }
+
+        .loader {
+            display: none;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #ff4b4b;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Banner Ad Container -->
+    <div class="ad-container">
+        <!-- Google AdMob Banner Ad -->
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-YOUR_ADMOB_PUBLISHER_ID"
+            data-ad-slot="YOUR_ADMOB_AD_UNIT_ID"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <!-- PDF Merger Tool Container -->
+    <div class="container">
+        <h1>PDF Merger Tool</h1>
+
+        <!-- File Upload Section -->
+        <div class="upload-section" id="dropZone">
+            <input type="file" id="fileInput" multiple accept="application/pdf">
+            <label for="fileInput" class="upload-label">
+                <i data-feather="upload"></i>
+                <span>Drag & Drop or <span class="highlight">Choose Files</span></span>
+            </label>
+        </div>
+
+        <!-- File List -->
+        <div class="file-list" id="fileList"></div>
+
+        <!-- Merge Button -->
+        <button class="merge-btn" id="mergeBtn" disabled>
+            <span>Merge PDFs</span>
+            <div class="loader"></div>
+        </button>
+
+        <!-- Download Link -->
+        <a href="#" class="download-link" id="downloadLink" style="display: none;">
+            <i data-feather="download"></i>
+            Download Merged PDF
+        </a>
+    </div>
+
+    <script>
+        // Initialize Feather Icons
+        feather.replace();
+
+        // DOM Elements
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        const mergeBtn = document.getElementById('mergeBtn');
+        const downloadLink = document.getElementById('downloadLink');
+
+        // File Upload Handlers
+        fileInput.addEventListener('change', updateFileList);
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        // Drag and Drop Handlers
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            fileInput.files = e.dataTransfer.files;
+            updateFileList();
+        });
+
+        // Update File List
+        function updateFileList() {
+            fileList.innerHTML = '';
+            const files = Array.from(fileInput.files);
+
+            files.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.setAttribute('data-index', index);
+                fileItem.innerHTML = `
+                    <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" alt="PDF Icon">
+                    <span>${file.name}</span>
+                    <i class="delete-btn" data-feather="trash-2" onclick="removeFile(${index})"></i>
+                `;
+                fileList.appendChild(fileItem);
+            });
+
+            feather.replace();
+            mergeBtn.disabled = files.length === 0; // Enable button if at least 1 file is uploaded
+        }
+
+        // Remove File
+        function removeFile(index) {
+            const files = Array.from(fileInput.files);
+            files.splice(index, 1);
+
+            const dataTransfer = new DataTransfer();
+            files.forEach(file => dataTransfer.items.add(file));
+            fileInput.files = dataTransfer.files;
+
+            updateFileList();
+        }
+
+        // Merge PDFs
+        async function mergePDFs() {
+            const files = fileInput.files;
+            if (files.length === 0) return;
+
+            // Show loading state
+            mergeBtn.disabled = true;
+            mergeBtn.querySelector('span').style.display = 'none';
+            mergeBtn.querySelector('.loader').style.display = 'block';
+
+            try {
+                const { PDFDocument } = PDFLib;
+                const mergedPdf = await PDFDocument.create();
+
+                for (let file of files) {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdfDoc = await PDFDocument.load(arrayBuffer);
+                    const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+                    copiedPages.forEach(page => mergedPdf.addPage(page));
+                }
+
+                const mergedPdfBytes = await mergedPdf.save();
+                const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+
+                // Set download link
+                downloadLink.href = url;
+                downloadLink.download = 'merged.pdf'; // Ensure the file has a name
+                downloadLink.style.display = 'inline-flex';
+
+                // Automatically trigger download (optional)
+                downloadLink.click();
+            } catch (error) {
+                alert('Error merging PDFs: ' + error.message);
+            } finally {
+                mergeBtn.disabled = false;
+                mergeBtn.querySelector('span').style.display = 'block';
+                mergeBtn.querySelector('.loader').style.display = 'none';
+            }
+        }
+
+        // Merge Button Click Event
+        mergeBtn.addEventListener('click', mergePDFs);
+    </script>
+</body>
+</html>
