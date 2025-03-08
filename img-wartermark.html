@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI-powered image watermarking tool with real-time preview and customization options.">
+  <meta property="og:title" content="Watermark App">
+  <meta property="og:description" content="Advanced image watermarking tool with drag-and-drop support.">
+  <meta property="og:image" content="assets/og-image.jpg">
+  <title>Watermark App</title>
+  <style>
+    /* CSS Styling */
+    :root {
+      --primary-color: #007bff;
+      --secondary-color: #0056b3;
+      --background-color: #f4f4f4;
+      --text-color: #333;
+      --white: #fff;
+      --border-radius: 8px;
+      --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background-color);
+      color: var(--text-color);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+    }
+
+    .upload-section {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .upload-label {
+      padding: 10px 20px;
+      background-color: var(--primary-color);
+      color: var(--white);
+      cursor: pointer;
+      border-radius: var(--border-radius);
+      display: inline-block;
+      transition: background-color 0.3s ease;
+    }
+
+    .upload-label:hover {
+      background-color: var(--secondary-color);
+    }
+
+    .editor {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    #canvas {
+      border: 1px solid #ccc;
+      max-width: 100%;
+      height: auto;
+      background-color: var(--white);
+      box-shadow: var(--box-shadow);
+      cursor: grab;
+    }
+
+    .controls {
+      width: 100%;
+      max-width: 300px;
+      background-color: var(--white);
+      padding: 20px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+    }
+
+    .controls h2 {
+      margin-top: 0;
+      color: var(--primary-color);
+    }
+
+    .controls input, .controls button, .controls select {
+      display: block;
+      margin-bottom: 15px;
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: var(--border-radius);
+      transition: border-color 0.3s ease;
+    }
+
+    .controls input:focus, .controls select:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+
+    .controls input[type="range"] {
+      width: 100%;
+    }
+
+    .controls button {
+      background-color: var(--primary-color);
+      color: var(--white);
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .controls button:hover {
+      background-color: var(--secondary-color);
+    }
+
+    .controls label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .controls .slider-value {
+      display: inline-block;
+      margin-left: 10px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    /* Ad Spaces */
+    .ad-space {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .ad-space iframe {
+      border: none;
+      overflow: hidden;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .editor {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      #canvas {
+        width: 100%;
+      }
+
+      .controls {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 24px;
+      }
+
+      .controls {
+        padding: 15px;
+      }
+
+      .controls input, .controls button, .controls select {
+        margin-bottom: 10px;
+      }
+    }
+  </style>
+  <!-- Google AdMob Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ADMOB_AD_UNIT_ID" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Ad Space at the Top -->
+    <div class="ad-space">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-YOUR_ADMOB_AD_UNIT_ID"
+           data-ad-slot="TOP_AD_SLOT_ID"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
+    <h1>AI-Powered Watermarking Tool</h1>
+    <div class="upload-section">
+      <input type="file" id="image-upload" accept="image/*" style="display: none;">
+      <label for="image-upload" class="upload-label">Upload Image</label>
+    </div>
+    <div class="editor">
+      <canvas id="canvas"></canvas>
+      <div class="controls">
+        <h2>Watermark Options</h2>
+        <div class="text-watermark">
+          <label for="text-input">Text:</label>
+          <input type="text" id="text-input" placeholder="Enter watermark text">
+          <label for="text-color">Color:</label>
+          <input type="color" id="text-color" value="#000000">
+          <label for="text-opacity">Opacity: <span class="slider-value" id="opacity-value">1</span></label>
+          <input type="range" id="text-opacity" min="0" max="1" step="0.1" value="1">
+          <label for="text-size">Size: <span class="slider-value" id="size-value">30</span></label>
+          <input type="number" id="text-size" min="10" max="100" value="30">
+          <label for="text-rotation">Rotation: <span class="slider-value" id="rotation-value">0</span></label>
+          <input type="number" id="text-rotation" min="0" max="360" value="0">
+          <label for="font-style">Font Style:</label>
+          <select id="font-style">
+            <option value="Arial">Arial</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Courier New">Courier New</option>
+            <option value="Verdana">Verdana</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Comic Sans MS">Comic Sans MS</option>
+            <option value="Impact">Impact</option>
+            <option value="Lucida Console">Lucida Console</option>
+            <option value="Tahoma">Tahoma</option>
+            <option value="Trebuchet MS">Trebuchet MS</option>
+            <option value="Palatino">Palatino</option>
+            <option value="Garamond">Garamond</option>
+            <option value="Bookman">Bookman</option>
+            <option value="Courier">Courier</option>
+            <option value="Avant Garde">Avant Garde</option>
+            <option value="Helvetica">Helvetica</option>
+            <option value="Futura">Futura</option>
+            <option value="Bodoni">Bodoni</option>
+            <option value="Didot">Didot</option>
+            <option value="Rockwell">Rockwell</option>
+            <option value="Baskerville">Baskerville</option>
+            <option value="Franklin Gothic">Franklin Gothic</option>
+          </select>
+          <label for="text-effect">Text Effect:</label>
+          <select id="text-effect">
+            <option value="none">None</option>
+            <option value="3d">3D Text</option>
+            <option value="shaded">Shaded Text</option>
+            <option value="image">Image Fill</option>
+          </select>
+          <input type="file" id="text-image" accept="image/*" style="display: none;">
+          <label for="text-image" id="text-image-label" class="upload-label">Upload Text Image</label>
+        </div>
+        <div class="image-watermark">
+          <input type="file" id="logo-upload" accept="image/*" style="display: none;">
+          <label for="logo-upload" class="upload-label">Upload Logo</label>
+          <label for="logo-opacity">Logo Opacity: <span class="slider-value" id="logo-opacity-value">1</span></label>
+          <input type="range" id="logo-opacity" min="0" max="1" step="0.1" value="1">
+          <label for="logo-width">Logo Width: <span class="slider-value" id="logo-width-value">100</span></label>
+          <input type="range" id="logo-width" min="10" max="500" step="10" value="100">
+          <label for="logo-height">Logo Height: <span class="slider-value" id="logo-height-value">50</span></label>
+          <input type="range" id="logo-height" min="10" max="500" step="10" value="50">
+          <label for="logo-shape">Logo Shape:</label>
+          <select id="logo-shape">
+            <option value="rectangular">Rectangular</option>
+            <option value="circular">Circular</option>
+            <option value="triangular">Triangular</option>
+          </select>
+        </div>
+        <button id="undo">Undo</button>
+        <button id="redo">Redo</button>
+        <button id="export">Export Image</button>
+      </div>
+    </div>
+
+    <!-- Ad Space at the Bottom -->
+    <div class="ad-space">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-YOUR_ADMOB_AD_UNIT_ID"
+           data-ad-slot="BOTTOM_AD_SLOT_ID"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </div>
+
+  <script>
+    // JavaScript Functionality
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const imageUpload = document.getElementById('image-upload');
+    const textInput = document.getElementById('text-input');
+    const textColor = document.getElementById('text-color');
+    const textOpacity = document.getElementById('text-opacity');
+    const textSize = document.getElementById('text-size');
+    const textRotation = document.getElementById('text-rotation');
+    const fontStyle = document.getElementById('font-style');
+    const textEffect = document.getElementById('text-effect');
+    const textImage = document.getElementById('text-image');
+    const textImageLabel = document.getElementById('text-image-label');
+    const logoUpload = document.getElementById('logo-upload');
+    const logoOpacity = document.getElementById('logo-opacity');
+    const logoWidth = document.getElementById('logo-width');
+    const logoHeight = document.getElementById('logo-height');
+    const logoShape = document.getElementById('logo-shape');
+    const undoBtn = document.getElementById('undo');
+    const redoBtn = document.getElementById('redo');
+    const exportBtn = document.getElementById('export');
+    const opacityValue = document.getElementById('opacity-value');
+    const sizeValue = document.getElementById('size-value');
+    const rotationValue = document.getElementById('rotation-value');
+    const logoOpacityValue = document.getElementById('logo-opacity-value');
+    const logoWidthValue = document.getElementById('logo-width-value');
+    const logoHeightValue = document.getElementById('logo-height-value');
+
+    let image, logo, textImageFile, history = [], historyIndex = -1;
+    let isDragging = false;
+    let dragStartX, dragStartY;
+    let watermarkX = 50, watermarkY = 50; // Initial position of the watermark
+
+    // Load image
+    imageUpload.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          image = new Image();
+          image.src = event.target.result;
+          image.onload = () => {
+            canvas.width = image.width;
+            canvas.height = image.height;
+            ctx.drawImage(image, 0, 0);
+            saveState();
+          };
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Update text watermark
+    textInput.addEventListener('input', drawWatermark);
+    textColor.addEventListener('change', drawWatermark);
+    textOpacity.addEventListener('input', (e) => {
+      opacityValue.textContent = e.target.value;
+      drawWatermark();
+    });
+    textSize.addEventListener('input', (e) => {
+      sizeValue.textContent = e.target.value;
+      drawWatermark();
+    });
+    textRotation.addEventListener('input', (e) => {
+      rotationValue.textContent = e.target.value;
+      drawWatermark();
+    });
+    fontStyle.addEventListener('change', drawWatermark);
+    textEffect.addEventListener('change', drawWatermark);
+    textImage.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          textImageFile = new Image();
+          textImageFile.src = event.target.result;
+          textImageFile.onload = () => {
+            drawWatermark();
+            saveState();
+          };
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Draw watermark (text or logo)
+    function drawWatermark() {
+      if (!image) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(image, 0, 0);
+
+      // Draw logo watermark
+      if (logo) {
+        ctx.globalAlpha = logoOpacity.value;
+        const width = parseInt(logoWidth.value);
+        const height = parseInt(logoHeight.value);
+        const shape = logoShape.value;
+
+        if (shape === 'circular') {
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(watermarkX + width / 2, watermarkY + height / 2, width / 2, 0, Math.PI * 2);
+          ctx.closePath();
+          ctx.clip();
+          ctx.drawImage(logo, watermarkX, watermarkY, width, height);
+          ctx.restore();
+        } else if (shape === 'triangular') {
+          ctx.save();
+          ctx.beginPath();
+          ctx.moveTo(watermarkX + width / 2, watermarkY);
+          ctx.lineTo(watermarkX + width, watermarkY + height);
+          ctx.lineTo(watermarkX, watermarkY + height);
+          ctx.closePath();
+          ctx.clip();
+          ctx.drawImage(logo, watermarkX, watermarkY, width, height);
+          ctx.restore();
+        } else {
+          ctx.drawImage(logo, watermarkX, watermarkY, width, height);
+        }
+      }
+
+      // Draw text watermark below the logo
+      if (textInput.value) {
+        ctx.globalAlpha = textOpacity.value;
+        ctx.font = `${textSize.value}px ${fontStyle.value}`;
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+        ctx.save();
+        ctx.translate(watermarkX, watermarkY + (logo ? parseInt(logoHeight.value) + 10 : 0));
+        ctx.rotate((textRotation.value * Math.PI) / 180);
+
+        const effect = textEffect.value;
+        if (effect === '3d') {
+          ctx.fillStyle = '#000';
+          ctx.fillText(textInput.value, 2, 2);
+          ctx.fillStyle = textColor.value;
+          ctx.fillText(textInput.value, 0, 0);
+        } else if (effect === 'shaded') {
+          ctx.fillStyle = '#000';
+          ctx.fillText(textInput.value, 2, 2);
+          ctx.fillStyle = textColor.value;
+          ctx.fillText(textInput.value, 0, 0);
+        } else if (effect === 'image' && textImageFile) {
+          ctx.fillStyle = ctx.createPattern(textImageFile, 'repeat');
+          ctx.fillText(textInput.value, 0, 0);
+        } else {
+          ctx.fillStyle = textColor.value;
+          ctx.fillText(textInput.value, 0, 0);
+        }
+
+        ctx.restore();
+      }
+    }
+
+    // Add logo watermark
+    logoUpload.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          logo = new Image();
+          logo.src = event.target.result;
+          logo.onload = () => {
+            drawWatermark();
+            saveState();
+          };
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    logoOpacity.addEventListener('input', (e) => {
+      logoOpacityValue.textContent = e.target.value;
+      drawWatermark();
+    });
+
+    logoWidth.addEventListener('input', (e) => {
+      logoWidthValue.textContent = e.target.value;
+      drawWatermark();
+    });
+
+    logoHeight.addEventListener('input', (e) => {
+      logoHeightValue.textContent = e.target.value;
+      drawWatermark();
+    });
+
+    logoShape.addEventListener('change', drawWatermark);
+
+    // Drag-and-drop functionality
+    canvas.addEventListener('mousedown', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      // Check if the mouse is over the watermark
+      if (
+        mouseX >= watermarkX && mouseX <= watermarkX + parseInt(logoWidth.value) &&
+        mouseY >= watermarkY && mouseY <= watermarkY + parseInt(logoHeight.value)
+      ) {
+        isDragging = true;
+        dragStartX = mouseX - watermarkX;
+        dragStartY = mouseY - watermarkY;
+      }
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (isDragging) {
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        watermarkX = mouseX - dragStartX;
+        watermarkY = mouseY - dragStartY;
+        drawWatermark();
+      }
+    });
+
+    canvas.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+      isDragging = false;
+    });
+
+    // Undo/Redo functionality
+    function saveState() {
+      history = history.slice(0, historyIndex + 1);
+      history.push(canvas.toDataURL());
+      historyIndex++;
+    }
+
+    undoBtn.addEventListener('click', () => {
+      if (historyIndex > 0) {
+        historyIndex--;
+        const img = new Image();
+        img.src = history[historyIndex];
+        img.onload = () => ctx.drawImage(img, 0, 0);
+      }
+    });
+
+    redoBtn.addEventListener('click', () => {
+      if (historyIndex < history.length - 1) {
+        historyIndex++;
+        const img = new Image();
+        img.src = history[historyIndex];
+        img.onload = () => ctx.drawImage(img, 0, 0);
+      }
+    });
+
+    // Export image
+    exportBtn.addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = 'watermarked-image.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  </script>
+</body>
+</html>
