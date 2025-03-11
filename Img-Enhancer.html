@@ -163,6 +163,12 @@
                 ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             }
+
+            if (hdr > 0) {
+                ctx.globalCompositeOperation = "overlay";
+                ctx.drawImage(canvas, 0, 0, canvas.width, canvas.height);
+                ctx.globalCompositeOperation = "source-over";
+            }
         }
 
         function resetFilters() {
