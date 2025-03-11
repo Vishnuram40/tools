@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Fully customizable QR Code Generator with various features and AdMob integration.">
+    <title>QR Code Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background: linear-gradient(to right, #2c3e50, #4ca1af);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+            color: #fff;
+            overflow: hidden;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            color: #333;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            outline: none;
+            background: #fff;
+            color: #000;
+        }
+        button {
+            background: #3498db;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        canvas {
+            display: block;
+            margin: 20px auto;
+            border-radius: 12px;
+            background: #fff;
+            padding: 10px;
+        }
+        .ad-space {
+            width: 100%;
+            height: 90px;
+            background: rgba(0, 0, 0, 0.1);
+            text-align: center;
+            line-height: 90px;
+            margin-top: 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>QR Code Generator</h2>
+        <div class="form-group">
+            <label for="qr-type">Select Content Type:</label>
+            <select id="qr-type" onchange="toggleInputBox()">
+                <option value="text" selected>Text</option>
+                <option value="url">URL</option>
+                <option value="phone">Phone Number</option>
+                <option value="email">Email</option>
+            </select>
+        </div>
+        <div class="form-group" id="input-box">
+            <label for="qr-text">Enter Content:</label>
+            <input type="text" id="qr-text" placeholder="Type here...">
+        </div>
+        <div class="form-group">
+            <label for="qr-size">QR Code Size:</label>
+            <input type="range" id="qr-size" min="100" max="500" value="250" oninput="updateSizeLabel()">
+            <span id="size-label">250 x 250</span>
+        </div>
+        <button onclick="generateQR()">Generate QR Code</button>
+        <canvas id="qr-code"></canvas>
+        <button onclick="downloadQR()">Download QR Code</button>
+        <div class="ad-space">Ad Space (Google AdMob)</div>
+    </div>
+
+    <script>
+        function toggleInputBox() {
+            let inputBox = document.getElementById('qr-text');
+            inputBox.value = '';
+            inputBox.style.color = '#000';
+        }
+        
+        function updateSizeLabel() {
+            let size = document.getElementById('qr-size').value;
+            document.getElementById('size-label').innerText = size + ' x ' + size;
+        }
+        
+        function generateQR() {
+            let text = document.getElementById('qr-text').value;
+            let size = parseInt(document.getElementById('qr-size').value);
+            let canvas = document.getElementById('qr-code');
+            let ctx = canvas.getContext('2d');
+            
+            let qr = new QRious({
+                element: canvas,
+                value: text,
+                size: size
+            });
+        }
+        
+        function downloadQR() {
+            let canvas = document.getElementById('qr-code');
+            let link = document.createElement('a');
+            link.href = canvas.toDataURL("image/png");
+            link.download = 'qr-code.png';
+            link.click();
+        }
+    </script>
+</body>
+</html>
