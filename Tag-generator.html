@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meta Tag Generator Tool</title>
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      margin: 0;
+      padding: 0;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 800px;
+      width: 90%;
+      margin: 20px;
+      padding: 30px;
+      background: #fff;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .container:hover {
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      color: #34495e;
+      font-size: 1.8rem;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+      outline: none;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #0056b3, #003d80);
+      transform: translateY(-2px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .preview-container textarea {
+      height: 200px;
+      resize: none;
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      padding: 12px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .ad-space {
+      margin: 20px 0;
+      padding: 15px;
+      background: #e9ecef;
+      text-align: center;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      input, textarea, select {
+        padding: 10px;
+      }
+
+      button {
+        padding: 10px;
+      }
+    }
+  </style>
+  <!-- Google AdMob Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ADMOB_PUBLISHER_ID"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Meta Tag Generator Tool</h1>
+
+    <!-- Ad Space 1: Banner Ad -->
+    <div class="ad-space">
+      <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-YOUR_ADMOB_PUBLISHER_ID"
+        data-ad-slot="YOUR_BANNER_AD_UNIT_ID"
+        data-ad-format="auto"
+        data-full-width-responsive="true"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
+    <div class="form-container">
+      <label for="siteTitle">Site Title</label>
+      <input type="text" id="siteTitle" placeholder="Enter Site Title">
+
+      <label for="metaDescription">Meta Description</label>
+      <textarea id="metaDescription" placeholder="Enter Meta Description"></textarea>
+
+      <label for="metaKeywords">Meta Keywords</label>
+      <input type="text" id="metaKeywords" placeholder="Enter Meta Keywords (comma-separated)">
+
+      <label for="robotsIndex">Allow Robots to Index Website</label>
+      <select id="robotsIndex">
+        <option value="index, follow">Index, Follow</option>
+        <option value="noindex, nofollow">Noindex, Nofollow</option>
+      </select>
+
+      <label for="robotsFollow">Allow Robots to Follow Links</label>
+      <select id="robotsFollow">
+        <option value="follow">Follow</option>
+        <option value="nofollow">Nofollow</option>
+      </select>
+
+      <label for="contentType">Content-Type</label>
+      <select id="contentType">
+        <option value="text/html; charset=UTF-8">UTF-8</option>
+        <option value="text/html; charset=UTF-16">UTF-16</option>
+        <option value="text/html; charset=ISO-8859-1">ISO-8859-1</option>
+        <option value="text/html; charset=WINDOWS-1252">WINDOWS-1252</option>
+      </select>
+
+      <label for="primaryLanguage">Primary Language</label>
+      <input type="text" id="primaryLanguage" placeholder="Enter Primary Language (e.g., en)">
+
+      <label for="revisitAfter">Revisit After (Days)</label>
+      <input type="number" id="revisitAfter" placeholder="Enter Number of Days">
+
+      <label for="authorName">Author Name</label>
+      <input type="text" id="authorName" placeholder="Enter Author Name">
+
+      <button onclick="generateMetaTags()">Generate Meta Tags</button>
+    </div>
+
+    <!-- Ad Space 2: Banner Ad -->
+    <div class="ad-space">
+      <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-YOUR_ADMOB_PUBLISHER_ID"
+        data-ad-slot="YOUR_BANNER_AD_UNIT_ID"
+        data-ad-format="auto"
+        data-full-width-responsive="true"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
+    <div class="preview-container">
+      <h2>Generated Meta Tags</h2>
+      <textarea id="metaTagsOutput" readonly></textarea>
+      <button onclick="copyToClipboard()">Copy to Clipboard</button>
+    </div>
+
+    <!-- Ad Space 3: Banner Ad -->
+    <div class="ad-space">
+      <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-YOUR_ADMOB_PUBLISHER_ID"
+        data-ad-slot="YOUR_BANNER_AD_UNIT_ID"
+        data-ad-format="auto"
+        data-full-width-responsive="true"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+  </div>
+
+  <script>
+    function generateMetaTags() {
+      const siteTitle = document.getElementById('siteTitle').value;
+      const metaDescription = document.getElementById('metaDescription').value;
+      const metaKeywords = document.getElementById('metaKeywords').value;
+      const robotsIndex = document.getElementById('robotsIndex').value;
+      const robotsFollow = document.getElementById('robotsFollow').value;
+      const contentType = document.getElementById('contentType').value;
+      const primaryLanguage = document.getElementById('primaryLanguage').value;
+      const revisitAfter = document.getElementById('revisitAfter').value;
+      const authorName = document.getElementById('authorName').value;
+
+      let metaTags = `<title>${siteTitle}</title>\n`;
+      metaTags += `<meta name="description" content="${metaDescription}">\n`;
+      metaTags += `<meta name="keywords" content="${metaKeywords}">\n`;
+      metaTags += `<meta name="robots" content="${robotsIndex}, ${robotsFollow}">\n`;
+      metaTags += `<meta http-equiv="Content-Type" content="${contentType}">\n`;
+      metaTags += `<meta http-equiv="content-language" content="${primaryLanguage}">\n`;
+      metaTags += `<meta name="revisit-after" content="${revisitAfter} days">\n`;
+      metaTags += `<meta name="author" content="${authorName}">`;
+
+      document.getElementById('metaTagsOutput').value = metaTags;
+    }
+
+    function copyToClipboard() {
+      const metaTagsOutput = document.getElementById('metaTagsOutput');
+      metaTagsOutput.select();
+      document.execCommand('copy');
+      alert('Meta tags copied to clipboard!');
+    }
+  </script>
+</body>
+</html>
