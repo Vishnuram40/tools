@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Counter Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #ffffff;
+            color: #000;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .textarea-container {
+            width: 80%;
+            max-width: 800px;
+            background: #f4f4f4;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            transition: 0.3s;
+            position: relative;
+        }
+        .textarea-container:hover {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            background: #fff;
+            border: 1px solid #ccc;
+            color: #000;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 8px;
+            outline: none;
+            resize: none;
+            transition: 0.3s;
+        }
+        textarea:focus {
+            border-color: #1db954;
+        }
+        .stats {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 15px;
+            gap: 15px;
+        }
+        .stat-item {
+            background: #ddd;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            min-width: 120px;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .stat-item:hover {
+            background: #1db954;
+            color: #fff;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #1db954;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .copy-btn:hover {
+            background: #17a447;
+        }
+    </style>
+</head>
+<body>
+    <h1>Word Counter Tool</h1>
+    <div class="textarea-container">
+        <button class="copy-btn" onclick="copyText()">Copy Text</button>
+        <textarea id="textInput" placeholder="Type or paste your text here..." oninput="countStats()"></textarea>
+        <div class="stats">
+            <div class="stat-item">Words: <span id="wordCount">0</span></div>
+            <div class="stat-item">Characters: <span id="charCount">0</span></div>
+            <div class="stat-item">Characters (No Spaces): <span id="charNoSpaceCount">0</span></div>
+            <div class="stat-item">Sentences: <span id="sentenceCount">0</span></div>
+            <div class="stat-item">Paragraphs: <span id="paragraphCount">0</span></div>
+            <div class="stat-item">Reading Time: <span id="readingTime">0</span> min</div>
+            <div class="stat-item">Grade Level: <span id="gradeLevel">0</span></div>
+        </div>
+    </div>
+    <script>
+        function countStats() {
+            let text = document.getElementById("textInput").value.trim();
+            let words = text.match(/\b\w+\b/g);
+            let wordCount = words ? words.length : 0;
+            let charCount = text.length;
+            let charNoSpaceCount = text.replace(/\s+/g, '').length;
+            let sentences = text.match(/[^.!?]+[.!?]+/g);
+            let sentenceCount = sentences ? sentences.length : 0;
+            let paragraphs = text.split(/\n\s*\n/).filter(p => p.trim() !== "");
+            let paragraphCount = paragraphs.length;
+            let readingTime = (wordCount / 200).toFixed(2);
+            let gradeLevel = (0.39 * (wordCount / (sentenceCount || 1)) + 11.8 * (charCount / (wordCount || 1)) - 15.59).toFixed(2);
+            
+            document.getElementById("wordCount").innerText = wordCount;
+            document.getElementById("charCount").innerText = charCount;
+            document.getElementById("charNoSpaceCount").innerText = charNoSpaceCount;
+            document.getElementById("sentenceCount").innerText = sentenceCount;
+            document.getElementById("paragraphCount").innerText = paragraphCount;
+            document.getElementById("readingTime").innerText = readingTime;
+            document.getElementById("gradeLevel").innerText = gradeLevel;
+        }
+        
+        function copyText() {
+            let textArea = document.getElementById("textInput");
+            textArea.select();
+            document.execCommand("copy");
+            alert("Text copied to clipboard!");
+        }
+    </script>
+</body>
+</html>
