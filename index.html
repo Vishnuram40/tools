@@ -1,358 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Your one-stop destination for free online tools. Compress images, convert PDFs, and more!">
-  <meta name="keywords" content="image tools, PDF tools, online tools, free tools, compress images, convert PDF">
-  <meta name="author" content="Your Name">
-  <title>Online Tools - Free Image and PDF Tools</title>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    /* General Styles */
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f9f9f9;
-      color: #333;
-      line-height: 1.6;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools Website - Home</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background: linear-gradient(135deg, #2a2a72, #009ffd);
+            color: white;
+            transition: background 0.3s, color 0.3s;
+        }
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
+        /* Header */
+        header {
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            margin: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
 
-    /* Header */
-    header {
-      background-color: #007BFF;
-      color: white;
-      padding: 40px 20px;
-      text-align: center;
-    }
+        /* Dark Mode */
+        .dark-mode {
+            background: #121212;
+            color: #e0e0e0;
+        }
 
-    header h1 {
-      margin: 0;
-      font-size: 2.5rem;
-    }
+        /* Buttons */
+        button {
+            padding: 12px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            background: #ff7e5f;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
 
-    header p {
-      margin: 10px 0 0;
-      font-size: 1.1rem;
-    }
+        button:hover {
+            background: #ff5e3a;
+            transform: scale(1.05);
+        }
 
-    /* Navigation */
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 20px;
-      background-color: #333;
-      color: white;
-    }
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            animation: fadeInUp 1s ease-in-out;
+        }
 
-    nav .logo {
-      font-size: 1.5rem;
-      font-weight: 600;
-    }
+        .tool-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
 
-    nav ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-    }
+        .tool-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
 
-    nav ul li {
-      margin-left: 20px;
-    }
+        /* Icons */
+        .tool-card i {
+            font-size: 24px;
+            color: #ffdd57;
+        }
 
-    nav ul li a {
-      color: white;
-      font-size: 1rem;
-      transition: color 0.3s ease;
-    }
+        /* Website Description */
+        .description {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            font-size: 18px;
+            line-height: 1.6;
+            animation: fadeInUp 1s ease-in-out;
+        }
 
-    nav ul li a:hover {
-      color: #007BFF;
-    }
+        /* Footer */
+        footer {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            color: white;
+        }
 
-    /* Search Bar */
-    #search-bar {
-      padding: 20px;
-      text-align: center;
-      background-color: #fff;
-      margin: 20px auto;
-      max-width: 600px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
-    #search-bar input {
-      width: 80%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 1rem;
-    }
-
-    #search-bar button {
-      padding: 10px 20px;
-      background-color: #007BFF;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1rem;
-      margin-left: 10px;
-      transition: background-color 0.3s ease;
-    }
-
-    #search-bar button:hover {
-      background-color: #0056b3;
-    }
-
-    /* Tools Grid */
-    #tools-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      padding: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .tool-card {
-      background-color: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      display: block;
-      color: inherit;
-    }
-
-    .tool-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .tool-card i {
-      font-size: 2rem;
-      color: #007BFF;
-      margin-bottom: 10px;
-    }
-
-    .tool-card h3 {
-      margin: 10px 0;
-      font-size: 1.2rem;
-      color: #333;
-    }
-
-    .tool-card p {
-      font-size: 0.9rem;
-      color: #666;
-    }
-
-    /* Call to Action */
-    #cta {
-      background-color: #007BFF;
-      color: white;
-      padding: 40px 20px;
-      text-align: center;
-      margin-top: 40px;
-    }
-
-    #cta h2 {
-      margin: 0;
-      font-size: 2rem;
-    }
-
-    #cta p {
-      margin: 10px 0 20px;
-      font-size: 1.1rem;
-    }
-
-    #cta button {
-      padding: 12px 25px;
-      background-color: white;
-      color: #007BFF;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    #cta button:hover {
-      background-color: #0056b3;
-      color: white;
-    }
-
-    /* Footer */
-    footer {
-      text-align: center;
-      padding: 20px;
-      background-color: #333;
-      color: white;
-      margin-top: 40px;
-    }
-
-    footer p {
-      margin: 0;
-      font-size: 0.9rem;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      nav {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      nav ul {
-        margin-top: 10px;
-      }
-
-      nav ul li {
-        margin: 0 10px;
-      }
-
-      #search-bar input {
-        width: 70%;
-      }
-
-      #tools-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      }
-    }
-
-    @media (max-width: 480px) {
-      header h1 {
-        font-size: 2rem;
-      }
-
-      header p {
-        font-size: 1rem;
-      }
-
-      #search-bar input {
-        width: 60%;
-      }
-
-      #cta h2 {
-        font-size: 1.5rem;
-      }
-
-      #cta p {
-        font-size: 1rem;
-      }
-    }
-  </style>
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
-  <!-- Header -->
-  <header>
-    <h1>Online Tools</h1>
-    <p>Your one-stop destination for free online tools</p>
-  </header>
+    <header>
+        <h1>Welcome to Tools Hub</h1>
+        <p>Your all-in-one toolkit for productivity</p>
+        <button onclick="window.location.href='#tools'">Explore Tools</button>
+        <button id="theme-toggle">🌙 Dark Mode</button>
+    </header>
 
-  <!-- Navigation -->
-  <nav>
-    <div class="logo">Online Tools</div>
-    <ul>
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Image Tools</a></li>
-      <li><a href="#">PDF Tools</a></li>
-      <li><a href="#">Contact</a></li>
-    </ul>
-  </nav>
+    <section id="tools">
+        <h2>Our Tools</h2>
+        <div class="tools-grid">
+            <a href="img-copmpress.html" class="tool-card"><i class="fas fa-compress"></i> Image Compression</a>
+            <a href="img-resizer.html" class="tool-card"><i class="fas fa-expand-arrows-alt"></i> Image Resizer</a>
+            <a href="img-watermark.html" class="tool-card"><i class="fas fa-shield-alt"></i> AI Watermarking</a>
+            <a href="pdf-merger.html" class="tool-card"><i class="fas fa-file-pdf"></i> PDF Merger</a>
+            <a href="pdf-splitter.html" class="tool-card"><i class="fas fa-cut"></i> PDF Splitter</a>
+            <a href="img-Enhancer.html" class="tool-card"><i class="fas fa-magic"></i> Image Enhancer</a>
+            <a href="word-counter.html" class="tool-card"><i class="fas fa-font"></i> Word Counter</a>
+            <a href="QR-generator.html" class="tool-card"><i class="fas fa-qrcode"></i> QR Code Generator</a>
+            <a href="color-picker.html" class="tool-card"><i class="fas fa-palette"></i> Color Picker</a>
+            <a href="Tag-generator.html" class="tool-card"><i class="fas fa-tags"></i> Meta Tag Generator</a>
+            <a href="img-converter.html" class="tool-card"><i class="fas fa-file-alt"></i> File Converter</a>
+        </div>
+    </section>
 
-  <!-- Search Bar -->
-  <section id="search-bar">
-    <input type="text" placeholder="Search for tools...">
-    <button><i class="fas fa-search"></i> Search</button>
-  </section>
+    <section class="description">
+        <h2>About Our Tools</h2>
+        <p>Tools Hub is your ultimate destination for quick and efficient online tools. From **image compression** to **file conversion**, we offer a wide range of **free, fast, and easy-to-use** tools to boost your productivity. Whether you need to resize images, generate QR codes, or edit PDFs, our tools provide a seamless experience. Try them now and simplify your workflow!</p>
+    </section>
 
-  <!-- Tools Grid -->
-  <section id="tools-grid">
-    <a href="img-copmpress.html" class="tool-card">
-      <i class="fas fa-image"></i>
-      <h3>Image Compressor</h3>
-      <p>Compress your images without losing quality.</p>
-    </a>
-    <a href="img-resizer.html" class="tool-card">
-      <i class="fas fa-expand-arrows-alt"></i>
-      <h3>Image Resizer</h3>
-      <p>Resize images to your desired dimensions.</p>
-    </a>
-    <a href="img-converter.html" class="tool-card">
-      <i class="fas fa-file-image"></i>
-      <h3>Image Converter</h3>
-      <p>Convert images to different formats (JPG, PNG, etc.).</p>
-    </a>
-    <a href="img-watermark.html" class="tool-card">
-      <i class="fas fa-tint"></i>
-      <h3>Image Watermark</h3>
-      <p>Add watermarks to your images easily.</p>
-    </a>
-    <a href="pdf-merger.html" class="tool-card">
-      <i class="fas fa-file-pdf"></i>
-      <h3>PDF Merger</h3>
-      <p>Merge multiple PDF files into one.</p>
-    </a>
-    <a href="pdf-splitter.html" class="tool-card">
-      <i class="fas fa-cut"></i>
-      <h3>PDF Splitter</h3>
-      <p>Split PDF files into individual pages.</p>
-    </a>
-    <a href="Img-Enhancer.html" class="tool-card">
-      <i class="fas fa-file-word"></i>
-      <h3>Image Enhancer Tool</h3>
-      <p>enhance the image quality online free</p>
-    </a>
-    <a href="word-counter.html" class="tool-card">
-      <i class="fas fa-file-archive"></i>
-      <h3>Word counter tool</h3>
-      <p>count words simply</p>
-    </a>
-    <a href="QR-generator.html" class="tool-card">
-      <i class="fas fa-qrcode"></i>
-      <h3>QR Code Generator</h3>
-      <p>Create QR codes for URLs, text, and more.</p>
-    </a>
-    <a href="color-picker.html" class="tool-card">
-      <i class="fas fa-eye-dropper"></i>
-      <h3>Color Picker</h3>
-      <p>Pick and identify colors from images.</p>
-    </a>
-    <a href="Tag-generator.html" class="tool-card">
-      <i class="fas fa-file-export"></i>
-      <h3>Meta Tag Generator</h3>
-      <p>generate meta tags</p>
-    </a>
-    <a href="video-compressor.html" class="tool-card">
-      <i class="fas fa-video"></i>
-      <h3>Video Compressor</h3>
-      <p>Compress videos without losing quality.</p>
-    </a>
-  </section>
+    <footer>
+        <p>&copy; 2025 Tools Hub. All rights reserved.</p>
+    </footer>
 
-  <!-- Call to Action -->
-  <section id="cta">
-    <h2>Need More Tools?</h2>
-    <p>Explore our full collection of free online tools.</p>
-    <button>View All Tools</button>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <p>&copy; 2023 Online Tools. All rights reserved.</p>
-  </footer>
+    <script>
+        // Dark Mode Toggle
+        const toggleButton = document.getElementById("theme-toggle");
+        toggleButton.addEventListener("click", () => {
+            document.body.classList.toggle("dark-mode");
+            if (document.body.classList.contains("dark-mode")) {
+                toggleButton.innerHTML = "☀️ Light Mode";
+            } else {
+                toggleButton.innerHTML = "🌙 Dark Mode";
+            }
+        });
+    </script>
 </body>
 </html>
