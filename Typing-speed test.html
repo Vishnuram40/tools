@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typing Speed Test</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      max-width: 700px;
+      width: 100%;
+    }
+
+    h1 {
+      text-align: center;
+      color: #4a90e2;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .description {
+      text-align: center;
+      font-size: 1rem;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    #time-select, #start-btn {
+      padding: 12px 20px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    #start-btn {
+      background-color: #4a90e2;
+      color: #fff;
+      cursor: pointer;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+
+    #start-btn:hover {
+      background-color: #357abd;
+    }
+
+    #start-btn:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .paragraph-container {
+      margin-bottom: 20px;
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+    }
+
+    #paragraph {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      color: #333;
+      margin: 0;
+    }
+
+    #input {
+      width: 100%;
+      height: 120px;
+      padding: 15px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      resize: none;
+      margin-bottom: 20px;
+    }
+
+    .results {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .results p {
+      font-size: 1.1rem;
+      margin: 10px 0;
+    }
+
+    #result-message {
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-top: 10px;
+    }
+
+    .ad-container {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .rules {
+      margin-top: 30px;
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+    }
+
+    .rules h2 {
+      color: #4a90e2;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .rules ul {
+      list-style-type: disc;
+      padding-left: 20px;
+      font-size: 1rem;
+      color: #555;
+    }
+
+    .correct {
+      color: green;
+    }
+
+    .incorrect {
+      color: red;
+      text-decoration: underline;
+    }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ADMOB_AD_UNIT_ID" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Typing Speed Test</h1>
+    <p class="description">Test and improve your typing speed with our dynamic typing test. Choose a time limit and start typing!</p>
+
+    <div class="controls">
+      <select id="time-select">
+        <option value="30">30 Seconds</option>
+        <option value="60">60 Seconds</option>
+        <option value="120">120 Seconds</option>
+      </select>
+      <button id="start-btn">Start Test</button>
+    </div>
+
+    <div class="paragraph-container">
+      <p id="paragraph"></p>
+    </div>
+
+    <textarea id="input" placeholder="Start typing here..." disabled></textarea>
+
+    <div class="results">
+      <p>Time Left: <span id="timer">0</span>s</p>
+      <p>WPM: <span id="wpm">0</span></p>
+      <p>CPM: <span id="cpm">0</span></p>
+      <p>Accuracy: <span id="accuracy">0</span>%</p>
+      <p id="result-message"></p>
+    </div>
+
+    <div class="ad-container">
+      <!-- Google AdMob Ad Unit -->
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-YOUR_ADMOB_AD_UNIT_ID"
+           data-ad-slot="1234567890"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
+    <div class="rules">
+      <h2>Rules:</h2>
+      <ul>
+        <li>Type the paragraph exactly as shown.</li>
+        <li>Copy-pasting is disabled.</li>
+        <li>Incorrect words will be marked in red.</li>
+        <li>Timer starts when you begin typing.</li>
+      </ul>
+    </div>
+  </div>
+  <script>
+    const paragraphElement = document.getElementById('paragraph');
+    const inputElement = document.getElementById('input');
+    const timerElement = document.getElementById('timer');
+    const wpmElement = document.getElementById('wpm');
+    const cpmElement = document.getElementById('cpm');
+    const accuracyElement = document.getElementById('accuracy');
+    const resultMessageElement = document.getElementById('result-message');
+    const startButton = document.getElementById('start-btn');
+    const timeSelect = document.getElementById('time-select');
+
+    let timer;
+    let timeLeft;
+    let isTestRunning = false;
+    let startTime;
+
+    const paragraphs = {
+      short: "India is a beautiful country with diverse traditions and cultures. The heritage sites and natural landscapes make it unique and wonderful. Many tourists visit India to experience its rich history and delicious food.",
+      medium: "Technology is evolving in India. Startups are growing rapidly, and the IT sector is booming with innovations. The education system is also adapting to modern trends, making learning more accessible. The youth of India is contributing significantly to digital transformation, shaping the country's future.",
+      long: "Indian culture is rich and diverse. People celebrate various festivals with great enthusiasm, and each region has its unique customs. The nation's history is filled with stories of bravery and wisdom, making India a land of inspiration and progress. The economy is expanding, and digital transformation is helping businesses grow nationwide. The development in artificial intelligence, cloud computing, and automation is bringing new job opportunities to the people. With strong government policies and an increase in investments, India is progressing rapidly towards becoming a global leader in technology and infrastructure."
+        
+    };
+
+    function startTest() {
+      const time = parseInt(timeSelect.value);
+      timeLeft = time;
+      timerElement.textContent = timeLeft;
+
+      paragraphElement.textContent = getParagraph(time);
+      inputElement.value = '';
+      inputElement.disabled = false;
+      inputElement.focus();
+      isTestRunning = true;
+      startTime = Date.now();
+
+      timer = setInterval(() => {
+        timeLeft--;
+        timerElement.textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+          endTest(false);
+        }
+      }, 1000);
+    }
+
+    function getParagraph(time) {
+      if (time === 30) return paragraphs.short;
+      if (time === 60) return paragraphs.medium;
+      if (time === 120) return paragraphs.long;
+    }
+
+    function endTest(success) {
+      clearInterval(timer);
+      isTestRunning = false;
+      inputElement.disabled = true;
+
+      const typedText = inputElement.value;
+      const originalText = paragraphElement.textContent;
+      const stats = calculateStats(typedText, originalText);
+
+      wpmElement.textContent = stats.wpm;
+      cpmElement.textContent = stats.cpm;
+      accuracyElement.textContent = stats.accuracy;
+
+      if (success) {
+        resultMessageElement.textContent = "Congratulations!";
+        resultMessageElement.style.color = "green";
+      } else {
+        resultMessageElement.textContent = "Fail! Try Again.";
+        resultMessageElement.style.color = "red";
+      }
+    }
+
+    function calculateStats(typedText, originalText) {
+      const typedWords = typedText.split(' ').length;
+      const typedChars = typedText.length;
+      const timeInMinutes = (Date.now() - startTime) / 60000;
+
+      const wpm = Math.round(typedWords / timeInMinutes);
+      const cpm = Math.round(typedChars / timeInMinutes);
+
+      let correctChars = 0;
+      for (let i = 0; i < typedText.length; i++) {
+        if (typedText[i] === originalText[i]) {
+          correctChars++;
+        }
+      }
+      const accuracy = ((correctChars / originalText.length) * 100).toFixed(2);
+
+      return { wpm, cpm, accuracy };
+    }
+
+    function validateInput() {
+      if (!isTestRunning) return;
+
+      const typedText = inputElement.value;
+      const originalText = paragraphElement.textContent;
+
+      let displayText = '';
+      for (let i = 0; i < originalText.length; i++) {
+        if (typedText[i] === undefined) {
+          displayText += originalText[i];
+        } else if (typedText[i] === originalText[i]) {
+          displayText += `<span class="correct">${originalText[i]}</span>`;
+        } else {
+          displayText += `<span class="incorrect">${originalText[i]}</span>`;
+        }
+      }
+      paragraphElement.innerHTML = displayText;
+
+      if (typedText === originalText) {
+        endTest(true);
+      }
+    }
+
+    startButton.addEventListener('click', startTest);
+    inputElement.addEventListener('input', validateInput);
+  </script>
+</body>
+</html>
