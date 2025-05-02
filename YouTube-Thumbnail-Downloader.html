@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Thumbnail Downloader</title>
+    <!-- Google AdMob Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ADMOB_PUBLISHER_ID" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --primary-color: #ff0000;
+            --secondary-color: #282828;
+            --light-color: #f9f9f9;
+            --dark-color: #212121;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        /* Ad Banner Styles */
+        .ad-banner {
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            background-color: #f1f1f1;
+            margin-bottom: 20px;
+        }
+        
+        .ad-container {
+            max-width: 728px;
+            margin: 0 auto;
+        }
+        
+        .ad-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .description {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--secondary-color);
+        }
+        
+        .input-group {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        #video-url {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        #video-url:focus {
+            border-color: var(--primary-color);
+        }
+        
+        #fetch-btn {
+            padding: 12px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        #fetch-btn:hover {
+            background-color: #cc0000;
+        }
+        
+        .error {
+            color: #d32f2f;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .results {
+            display: none;
+            margin-top: 30px;
+        }
+        
+        .thumbnail-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .thumbnail-option {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .thumbnail-option:hover {
+            transform: translateY(-5px);
+        }
+        
+        .thumbnail-preview {
+            width: 100%;
+            height: auto;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .thumbnail-info {
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .thumbnail-resolution {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+        }
+        
+        .download-btn {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .download-btn:hover {
+            background-color: #cc0000;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary-color);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 600px) {
+            .input-group {
+                flex-direction: column;
+            }
+            
+            #video-url {
+                border-radius: 4px;
+                margin-bottom: 10px;
+            }
+            
+            #fetch-btn {
+                border-radius: 4px;
+            }
+            
+            .thumbnail-option {
+                max-width: 100%;
+            }
+            
+            /* Mobile Ad Styling */
+            .ad-container {
+                max-width: 320px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Banner Ad -->
+    <div class="ad-banner">
+        <div class="ad-container">
+            <div class="ad-label">Advertisement</div>
+            <!-- AdMob Ad Unit -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_ADMOB_PUBLISHER_ID"
+                 data-ad-slot="YOUR_AD_UNIT_ID_TOP"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>YouTube Thumbnail Downloader</h1>
+        <p class="description">Enter a YouTube video URL below to download thumbnails in different resolutions</p>
+        
+        <div class="input-group">
+            <input type="text" id="video-url" placeholder="Paste YouTube video URL here..." required>
+            <button id="fetch-btn">Get Thumbnails</button>
+        </div>
+        
+        <div class="error" id="error-message"></div>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Fetching thumbnails...</p>
+        </div>
+        
+        <div class="results" id="results">
+            <h2 style="text-align: center; margin-bottom: 20px;">Available Thumbnails</h2>
+            <div class="thumbnail-container" id="thumbnail-container">
+                <!-- Thumbnail options will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Banner Ad -->
+    <div class="ad-banner" style="margin-top: 20px;">
+        <div class="ad-container">
+            <div class="ad-label">Advertisement</div>
+            <!-- AdMob Ad Unit -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_ADMOB_PUBLISHER_ID"
+                 data-ad-slot="YOUR_AD_UNIT_ID_BOTTOM"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoUrlInput = document.getElementById('video-url');
+            const fetchBtn = document.getElementById('fetch-btn');
+            const errorMessage = document.getElementById('error-message');
+            const loading = document.getElementById('loading');
+            const results = document.getElementById('results');
+            const thumbnailContainer = document.getElementById('thumbnail-container');
+            
+            // Initialize ads
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            
+            fetchBtn.addEventListener('click', fetchThumbnails);
+            videoUrlInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    fetchThumbnails();
+                }
+            });
+            
+            function fetchThumbnails() {
+                const videoUrl = videoUrlInput.value.trim();
+                
+                if (!videoUrl) {
+                    showError('Please enter a YouTube video URL');
+                    return;
+                }
+                
+                const videoId = extractVideoId(videoUrl);
+                
+                if (!videoId) {
+                    showError('Invalid YouTube URL. Please enter a valid YouTube video URL.');
+                    return;
+                }
+                
+                // Show loading, hide results and error
+                loading.style.display = 'block';
+                results.style.display = 'none';
+                errorMessage.style.display = 'none';
+                
+                // Simulate loading (in a real app, you might have API calls here)
+                setTimeout(() => {
+                    displayThumbnails(videoId);
+                    loading.style.display = 'none';
+                    
+                    // Refresh ads after content loads
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                }, 1000);
+            }
+            
+            function extractVideoId(url) {
+                // Regular expressions to match different YouTube URL formats
+                const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+                const match = url.match(regExp);
+                
+                if (match && match[2].length === 11) {
+                    return match[2];
+                }
+                
+                // Try to match YouTube Shorts URLs
+                const shortsRegExp = /^.*(youtube.com\/shorts\/)([^#\&\?]*).*/;
+                const shortsMatch = url.match(shortsRegExp);
+                
+                if (shortsMatch && shortsMatch[2].length === 11) {
+                    return shortsMatch[2];
+                }
+                
+                return null;
+            }
+            
+            function displayThumbnails(videoId) {
+                // Clear previous results
+                thumbnailContainer.innerHTML = '';
+                
+                // Thumbnail resolutions and their labels
+                const thumbnailOptions = [
+                    {
+                        resolution: 'Max Resolution',
+                        label: 'Max Resolution (1280x720)',
+                        url: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+                    },
+                    {
+                        resolution: 'High Quality',
+                        label: 'High Quality (480x360)',
+                        url: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+                    },
+                    {
+                        resolution: 'Medium Quality',
+                        label: 'Medium Quality (320x180)',
+                        url: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`
+                    },
+                    {
+                        resolution: 'Standard Quality',
+                        label: 'Standard Quality (640x480)',
+                        url: `https://img.youtube.com/vi/${videoId}/sddefault.jpg`
+                    },
+                    {
+                        resolution: 'Default',
+                        label: 'Default (120x90)',
+                        url: `https://img.youtube.com/vi/${videoId}/default.jpg`
+                    }
+                ];
+                
+                // Create thumbnail options
+                thumbnailOptions.forEach(option => {
+                    const thumbnailOption = document.createElement('div');
+                    thumbnailOption.className = 'thumbnail-option';
+                    
+                    // Create image preview
+                    const img = document.createElement('img');
+                    img.src = option.url;
+                    img.alt = `${option.resolution} thumbnail`;
+                    img.className = 'thumbnail-preview';
+                    img.onerror = function() {
+                        this.onerror = null;
+                        this.src = 'https://via.placeholder.com/300x200?text=Thumbnail+not+available';
+                    };
+                    
+                    // Create info div
+                    const infoDiv = document.createElement('div');
+                    infoDiv.className = 'thumbnail-info';
+                    
+                    // Create resolution label
+                    const resolutionDiv = document.createElement('div');
+                    resolutionDiv.className = 'thumbnail-resolution';
+                    resolutionDiv.textContent = option.label;
+                    
+                    // Create download button
+                    const downloadBtn = document.createElement('button');
+                    downloadBtn.className = 'download-btn';
+                    downloadBtn.textContent = 'Download';
+                    downloadBtn.onclick = function() {
+                        downloadThumbnail(option.url, `yt_thumbnail_${videoId}_${option.resolution.replace(' ', '_').toLowerCase()}.jpg`);
+                    };
+                    
+                    // Append elements
+                    infoDiv.appendChild(resolutionDiv);
+                    infoDiv.appendChild(downloadBtn);
+                    thumbnailOption.appendChild(img);
+                    thumbnailOption.appendChild(infoDiv);
+                    thumbnailContainer.appendChild(thumbnailOption);
+                });
+                
+                // Show results
+                results.style.display = 'block';
+            }
+            
+            function downloadThumbnail(imageUrl, filename) {
+                // Show loading for the download
+                loading.style.display = 'block';
+                
+                // Fetch the image first
+                fetch(imageUrl)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        // Create a blob URL
+                        const blobUrl = URL.createObjectURL(blob);
+                        
+                        // Create a temporary anchor element
+                        const link = document.createElement('a');
+                        link.href = blobUrl;
+                        link.download = filename;
+                        
+                        // Append to the body, trigger click, then remove
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        
+                        // Clean up the blob URL
+                        setTimeout(() => {
+                            URL.revokeObjectURL(blobUrl);
+                            loading.style.display = 'none';
+                        }, 100);
+                    })
+                    .catch(error => {
+                        console.error('Download failed:', error);
+                        showError('Failed to download thumbnail. Please try again.');
+                        loading.style.display = 'none';
+                    });
+            }
+            
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+                results.style.display = 'none';
+                loading.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
