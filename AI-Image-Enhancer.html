@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Photo Enhancer | Transform Your Images</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --darker: #0f172a;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --dark-gray: #334155;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: var(--darker);
+            color: var(--light);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: var(--dark);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        .upload-section {
+            background: var(--dark);
+            border-radius: 16px;
+            padding: 3rem;
+            text-align: center;
+            margin: 2rem 0;
+            transition: all 0.3s ease;
+            border: 2px dashed var(--dark-gray);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-section:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);
+        }
+
+        .upload-section.active {
+            border-color: var(--primary);
+            background-color: rgba(99, 102, 241, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .upload-btn {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 0.8rem 2rem;
+            margin-top: 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(99, 102, 241, 0.25);
+        }
+
+        .preview-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .image-box {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--dark);
+            min-height: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .image-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: none;
+        }
+
+        .image-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+            color: var(--gray);
+        }
+
+        .image-placeholder i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark-gray);
+        }
+
+        .image-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            display: none;
+            place-items: center;
+            z-index: 10;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--primary);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .result-actions {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: var(--dark);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-btn.secondary {
+            background: var(--dark-gray);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .features {
+            margin: 4rem 0;
+            padding: 2rem 0;
+        }
+
+        .features h3 {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: white;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--dark);
+            padding: 2rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .footer {
+            background: var(--dark);
+            padding: 3rem 2rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            text-align: left;
+        }
+
+        .footer-column h4 {
+            color: white;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--dark-gray);
+            color: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--dark-gray);
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+            
+            .preview-container {
+                grid-template-columns: 1fr;
+            }
+
+            .upload-section {
+                padding: 2rem 1rem;
+            }
+
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .result-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-magic"></i>
+            </div>
+            <h1>AI Photo Enhancer</h1>
+        </div>
+        <div class="toolbar">
+            <!--<button class="action-btn secondary">
+                <i class="fas fa-user"></i> Sign In
+            </button> -->
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="hero">
+            <h2>Transform Your Photos with AI</h2>
+            <p>Upload your blurry, low-quality images and let our advanced AI technology enhance them to stunning clarity in seconds.</p>
+        </section>
+
+        <div class="upload-section" id="dropZone">
+            <input type="file" id="fileInput" hidden accept="image/*">
+            <div class="upload-icon">
+                <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <h3>Drag & Drop Your Image Here</h3>
+            <p>or</p>
+            <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                <i class="fas fa-folder-open"></i> Browse Files
+            </button>
+            <p class="small">Supports: JPG, PNG, WEBP (Max 10MB)</p>
+        </div>
+
+        <div class="preview-container">
+            <div class="image-box">
+                <div class="loading-overlay" id="originalLoading">
+                    <div class="spinner"></div>
+                </div>
+                <div class="image-placeholder">
+                    <i class="fas fa-image"></i>
+                    <p>Original image will appear here</p>
+                </div>
+                <img id="originalPreview" alt="Original Preview">
+                <div class="image-label">Original Image</div>
+            </div>
+            
+            <div class="image-box">
+                <div class="loading-overlay" id="enhancedLoading">
+                    <div class="spinner"></div>
+                </div>
+                <div class="image-placeholder">
+                    <i class="fas fa-star"></i>
+                    <p>Enhanced result will appear here</p>
+                </div>
+                <img id="enhancedPreview" alt="Enhanced Preview">
+                <div class="image-label">Enhanced Result</div>
+            </div>
+        </div>
+
+        <div class="result-actions">
+            <button class="action-btn primary" id="downloadBtn" style="display: none;">
+                <i class="fas fa-download"></i> Download Enhanced
+            </button>
+            <button class="action-btn secondary" id="shareBtn" style="display: none;">
+                <i class="fas fa-share-alt"></i> Share Result
+            </button>
+            <button class="action-btn secondary" id="newImageBtn" style="display: none;">
+                <i class="fas fa-redo"></i> Enhance Another
+            </button>
+        </div>
+
+        <section class="features">
+            <h3>Why Choose Our AI Enhancer?</h3>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h4>Lightning Fast</h4>
+                    <p>Get enhanced results in seconds with our optimized AI algorithms that work at incredible speed.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4>Advanced Technology</h4>
+                    <p>Powered by state-of-the-art deep learning models trained on millions of high-quality images.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h4>Privacy Focused</h4>
+                    <p>Your images are processed securely and never stored permanently on our servers.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h4>AI Photo Enhancer</h4>
+                <p>Transform your photos with our cutting-edge AI technology. Perfect for restoring old photos, enhancing low-quality images, and bringing your memories to life.</p>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/share/1C9KAbfzZr/"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://x.com/vishnu_ram98?t=ZCFaR_ueTIU-aty7cMasyQ&s=09"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/vishnu_ram69?igsh=MXh0NXN0bHpidzY2YQ==&utm_source=ig_contact_invite"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.linkedin.com/in/vishnu-ram-94283824b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Features</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Pricing</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Support</h4>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Help Center</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Contact Us</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 AI Photo Enhancer. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const originalPreview = document.getElementById('originalPreview');
+        const enhancedPreview = document.getElementById('enhancedPreview');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const shareBtn = document.getElementById('shareBtn');
+        const newImageBtn = document.getElementById('newImageBtn');
+        const originalPlaceholder = document.querySelector('.image-box:nth-child(1) .image-placeholder');
+        const enhancedPlaceholder = document.querySelector('.image-box:nth-child(2) .image-placeholder');
+
+        // Handle file selection
+        fileInput.addEventListener('change', handleFileSelect);
+        
+        // Drag & drop handlers
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('active');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('active');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('active');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) handleFile(file);
+        }
+
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                alert('Please upload an image file (JPG, PNG, or WEBP)');
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File size should be less than 10MB');
+                return;
+            }
+
+            // Show original preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                originalPreview.src = e.target.result;
+                originalPreview.style.display = 'block';
+                originalPlaceholder.style.display = 'none';
+                enhancePhoto(file);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function enhancePhoto(file) {
+            // Show loading state
+            document.getElementById('enhancedLoading').style.display = 'grid';
+            enhancedPlaceholder.style.display = 'none';
+            
+            // Create canvas for image processing
+            const img = new Image();
+            img.src = URL.createObjectURL(file);
+            
+            await img.decode(); // Wait for image to load
+            
+            // Create canvas
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            
+            // Draw original image
+            ctx.drawImage(img, 0, 0);
+            
+            // Apply basic enhancements
+            applyEnhancements(canvas, ctx);
+            
+            // Convert to blob and display
+            canvas.toBlob((blob) => {
+                const enhancedUrl = URL.createObjectURL(blob);
+                enhancedPreview.src = enhancedUrl;
+                enhancedPreview.style.display = 'block';
+                document.getElementById('enhancedLoading').style.display = 'none';
+                
+                // Show action buttons
+                downloadBtn.style.display = 'inline-flex';
+                shareBtn.style.display = 'inline-flex';
+                newImageBtn.style.display = 'inline-flex';
+                
+                // Scroll to results
+                document.querySelector('.preview-container').scrollIntoView({ behavior: 'smooth' });
+            }, 'image/jpeg', 0.95);
+        }
+
+        function applyEnhancements(canvas, ctx) {
+            // Get image data
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            
+            // Basic contrast and brightness adjustment
+            const contrast = 1.2; // Increase contrast
+            const brightness = 10; // Increase brightness
+            
+            for (let i = 0; i < data.length; i += 4) {
+                // Contrast adjustment
+                data[i] = ((data[i] / 255 - 0.5) * contrast + 0.5) * 255;
+                data[i+1] = ((data[i+1] / 255 - 0.5) * contrast + 0.5) * 255;
+                data[i+2] = ((data[i+2] / 255 - 0.5) * contrast + 0.5) * 255;
+                
+                // Brightness adjustment
+                data[i] = Math.min(255, Math.max(0, data[i] + brightness));
+                data[i+1] = Math.min(255, Math.max(0, data[i+1] + brightness));
+                data[i+2] = Math.min(255, Math.max(0, data[i+2] + brightness));
+            }
+            
+            // Apply sharpening (simple unsharp mask)
+            ctx.putImageData(imageData, 0, 0);
+            
+            // Additional sharpening effect
+            ctx.filter = 'contrast(1.1) saturate(1.1)';
+            ctx.drawImage(canvas, 0, 0);
+            ctx.filter = 'none';
+        }
+
+        // Download handler
+        downloadBtn.addEventListener('click', () => {
+            const link = document.createElement('a');
+            link.download = 'enhanced-photo.jpg';
+            link.href = enhancedPreview.src;
+            link.click();
+        });
+
+        // Share handler
+        shareBtn.addEventListener('click', async () => {
+            try {
+                const blob = await fetch(enhancedPreview.src).then(r => r.blob());
+                const file = new File([blob], 'enhanced-photo.jpg', { type: blob.type });
+                
+                if (navigator.share) {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Enhanced Photo',
+                        text: 'Check out my enhanced photo using AI Photo Enhancer!'
+                    });
+                } else {
+                    // Fallback for browsers that don't support sharing files
+                    const shareUrl = URL.createObjectURL(file);
+                    window.open(`mailto:?subject=Enhanced Photo&body=Check out my enhanced photo! ${shareUrl}`);
+                }
+            } catch (error) {
+                alert('Sharing failed: ' + error.message);
+            }
+        });
+
+        // New image handler
+        newImageBtn.addEventListener('click', () => {
+            // Reset the UI
+            originalPreview.src = '';
+            originalPreview.style.display = 'none';
+            enhancedPreview.src = '';
+            enhancedPreview.style.display = 'none';
+            originalPlaceholder.style.display = 'flex';
+            enhancedPlaceholder.style.display = 'flex';
+            downloadBtn.style.display = 'none';
+            shareBtn.style.display = 'none';
+            newImageBtn.style.display = 'none';
+            fileInput.value = '';
+            
+            // Scroll back to upload section
+            document.getElementById('dropZone').scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
